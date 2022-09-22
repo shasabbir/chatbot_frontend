@@ -1,10 +1,31 @@
 import logo from './logo.svg';
 import './App.css';
 import Message from './Message';
-
+import { useState, useEffect } from "react"
+import axios from "axios";
 function App() {
-  var msgs=[{type:"b",msg:"Bye, see you"},{type:"u",msg:"Ok, thank you have a good day"},{type:"b",msg:"I am looking for your help"},{type:"u",msg:"You are welcome"},{type:"b",msg:"I am good too, thank you for your support"},{type:"u",msg:"Hi xyz i am good tnx how about you?"},{type:"b",msg:"Hi, how are you Sabbir?"}]
-  //const [msgs, setmsgs] = useState([]);
+  var Send=()=>{
+var data={type:"u",msg:document.querySelector("#root > div > div > div > div > div > div.card-footer > div > textarea").value};
+document.querySelector("#root > div > div > div > div > div > div.card-footer > div > textarea").value="";
+settyping(true);
+var cc = msgs;
+cc.unshift(data);
+setmsgs([...cc]);
+console.log(msgs);
+axios.post("http://127.0.0.1:8000/api/test",{text:data.msg}).then(rsp => {
+  var cc = msgs;
+  cc.unshift({type:"b",msg:rsp.data.text});
+  setmsgs([...cc]);
+  settyping(false);
+  console.log(msgs);
+
+}).catch(err => {
+
+})
+  }
+  //var msgs=;
+  const [msgs, setmsgs] = useState([{type:"b",msg:"Bye, see you"},{type:"u",msg:"Ok, thank you have a good day"},{type:"b",msg:"I am looking for your help"},{type:"u",msg:"You are welcome"},{type:"b",msg:"I am good too, thank you for your support"},{type:"u",msg:"Hi xyz i am good tnx how about you?"},{type:"b",msg:"Hi, how are you Sabbir?"}]);
+  const [typing, settyping] = useState(false);
   return (
     <div className="App">
       <br/><br/><br/><br/>
@@ -36,22 +57,29 @@ function App() {
               </div>
             </div>
             <div class="card-body msg_card_body">
-            {msgs.map(({ msg,type}) => {
+            {msgs.map((item,index) => {
           return (
-            <Message type={type} text={msg} />
+            <Message key={index} type={item.type} text={item.msg} />
           );
         })}
+        
 
 
             </div>
 
+            {(() => {
+      if (typing) {
+        return (
+            <img src="https://i.pinimg.com/originals/6b/48/af/6b48af2e74f452064868ac2e8d466e7f.gif" class="rounded-circle user_img"/>
+            )
 
-
+      }
+    })()}
             <div class="card-footer">
               <div class="input-group">
                 <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
                 <div class="input-group-append">
-                  <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
+                  <span class="input-group-text send_btn" onClick={Send}><i class="fas fa-location-arrow"></i></span>
                 </div>
               </div>
             </div>

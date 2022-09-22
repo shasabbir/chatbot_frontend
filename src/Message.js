@@ -20,7 +20,7 @@ function BotMessage(props) {
 
       } else {
         return (
-          <div class="d-flex justify-content-end mb-4">
+          <div key={props.key} class="d-flex justify-content-end mb-4">
                 <div class="msg_cotainer_send">
                 {props.text}
                 </div>
