@@ -19,6 +19,21 @@ body,html{
           background: linear-gradient(to right, #91EAE4, #86A8E7, #7F7FD5);
     }
   </style>
+  <script>
+    $(document).ready(function(){
+$('#action_menu_btn').click(function(){
+$('.action_menu').toggle();
+});
+});
+$(document).ready(function(){
+$("#inputspace").keypress(function (e) {
+  if(e.which === 13 && !e.shiftKey) {
+      e.preventDefault();
+      document.querySelector("#root > div > div > div > div > div > div.card-footer > div > div > span").click();
+  }
+});
+});
+</script>
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"

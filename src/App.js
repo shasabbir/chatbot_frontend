@@ -1,18 +1,33 @@
-import logo from './logo.svg';
+import typinggif from './typing.gif';
 import './App.css';
 import Message from './Message';
 import { useState, useEffect } from "react"
 import axios from "axios";
+import $ from 'jquery';
+
+
+
 function App() {
+  
+  const [msgs, setmsgs] = useState([{type:"b",msg:"Bye, see you"},{type:"u",msg:"Ok, thank you have a good day"},{type:"b",msg:"I am looking for your help"},{type:"u",msg:"You are welcome"},{type:"b",msg:"I am good too, thank you for your support"},{type:"u",msg:"Hi xyz i am good tnx how about you?"},{type:"b",msg:"Hi, how are you Sabbir?"}]);
+  const [typing, settyping] = useState(false);
+
+  var UpdateUrl=()=> {
+    let text;
+    let url = prompt("Please enter your new url:");
+    localStorage.setItem("url",url);
+    //document.getElementById("demo").innerHTML = text;
+  }
   var Send=()=>{
-var data={type:"u",msg:document.querySelector("#root > div > div > div > div > div > div.card-footer > div > textarea").value};
-document.querySelector("#root > div > div > div > div > div > div.card-footer > div > textarea").value="";
+    if(document.querySelector("#inputspace").value!=""&&(/[a-zA-Z]/g.test(document.querySelector("#inputspace").value))){
+var data={type:"u",msg:document.querySelector("#inputspace").value};
+document.querySelector("#inputspace").value="";
 settyping(true);
 var cc = msgs;
 cc.unshift(data);
 setmsgs([...cc]);
 console.log(msgs);
-axios.post("http://127.0.0.1:8000/api/test",{text:data.msg}).then(rsp => {
+axios.post(localStorage.getItem("url"),{text:data.msg}).then(rsp => {
   var cc = msgs;
   cc.unshift({type:"b",msg:rsp.data.text});
   setmsgs([...cc]);
@@ -22,10 +37,8 @@ axios.post("http://127.0.0.1:8000/api/test",{text:data.msg}).then(rsp => {
 }).catch(err => {
 
 })
-  }
+  }}
   //var msgs=;
-  const [msgs, setmsgs] = useState([{type:"b",msg:"Bye, see you"},{type:"u",msg:"Ok, thank you have a good day"},{type:"b",msg:"I am looking for your help"},{type:"u",msg:"You are welcome"},{type:"b",msg:"I am good too, thank you for your support"},{type:"u",msg:"Hi xyz i am good tnx how about you?"},{type:"b",msg:"Hi, how are you Sabbir?"}]);
-  const [typing, settyping] = useState(false);
   return (
     <div className="App">
       <br/><br/><br/><br/>
@@ -50,7 +63,7 @@ axios.post("http://127.0.0.1:8000/api/test",{text:data.msg}).then(rsp => {
               <div class="action_menu">
                 <ul>
                   <li><i class="fas fa-user-circle"></i>  About us</li>
-                  <li><i class="fas fa-users"></i> More about bert</li>
+                  <li onClick={UpdateUrl}><i class="fas fa-users"></i>Update Url</li>
                   <li><i class="fas fa-plus"></i> Donate us</li>
                   <li><i class="fas fa-ban"></i>Exit</li>
                 </ul>
@@ -70,14 +83,14 @@ axios.post("http://127.0.0.1:8000/api/test",{text:data.msg}).then(rsp => {
             {(() => {
       if (typing) {
         return (
-            <img src="https://i.pinimg.com/originals/6b/48/af/6b48af2e74f452064868ac2e8d466e7f.gif" class="rounded-circle user_img"/>
+            <img src={typinggif} class="rounded-circle user_img"/>
             )
 
       }
     })()}
             <div class="card-footer">
               <div class="input-group">
-                <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                <input type ="text" id="inputspace" name="" class="form-control type_msg" placeholder="Type your message..."></input>
                 <div class="input-group-append">
                   <span class="input-group-text send_btn" onClick={Send}><i class="fas fa-location-arrow"></i></span>
                 </div>
